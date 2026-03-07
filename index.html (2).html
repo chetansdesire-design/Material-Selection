@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URBAN CASA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vibrant-blue: #0061ff;
+            --soft-bg: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --accent-gradient: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+        }
+        body { background-color: var(--soft-bg); color: var(--text-dark); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; font-size: 0.8rem; }
+        .container { max-width: 1400px; margin: auto; }
+        .header-card { background: var(--white); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border: 1px solid var(--border-color); }
+        h2 { margin: 0; font-size: 1.2rem; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
+        .order-section, .notes-section { background: var(--white); border-radius: 20px; padding: 20px; margin-bottom: 30px; border: 1px solid var(--border-color); }
+        .section-title { font-size: 0.9rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .section-title::before { content: ""; width: 4px; height: 16px; background: var(--accent-gradient); border-radius: 10px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
+        th { text-align: left; font-size: 0.7rem; color: var(--text-light); padding: 10px; text-transform: uppercase; }
+        td { background: var(--soft-bg); padding: 8px 10px; border: 1px solid var(--border-color); }
+        
+        input, textarea { text-transform: capitalize; }
+        input { background: transparent; border: 1px solid transparent; width: 90%; font-family: inherit; font-size: 0.8rem; font-weight: 600; outline: none; }
+        input::placeholder, textarea::placeholder { font-size: 0.6rem; opacity: 0.5; color: var(--text-light); }
+        
+        .icon-btn { background: none; border: 1px solid var(--border-color); padding: 8px; border-radius: 8px; cursor: pointer; }
+        .add-btn { background: var(--white); color: var(--vibrant-blue); border: 1px solid var(--vibrant-blue); padding: 5px 15px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .img-preview { width: 40px; height: 30px; background: #e2e8f0; border-radius: 4px; object-fit: cover; display: none; margin-top: 5px; }
+        .upload-btn { font-size: 0.65rem; font-weight: 700; color: var(--vibrant-blue); cursor: pointer; text-transform: uppercase; }
+        textarea { width: 100%; height: 80px; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; font-family: inherit; resize: none; box-sizing: border-box; }
+        
+        .signature-section { display: flex; justify-content: space-between; margin-top: 40px; padding: 20px; }
+        .sig-box { border-top: 2px solid var(--text-dark); width: 200px; text-align: center; padding-top: 10px; font-size: 0.8rem; font-weight: 600; }
+        .print-fab { position: fixed; bottom: 30px; right: 30px; background: var(--vibrant-blue); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0, 97, 255, 0.4); cursor: pointer; font-size: 20px; z-index: 1000; }
+        .toast { background: var(--text-dark); color: white; padding: 12px 20px; border-radius: 10px; margin-bottom: 10px; font-size: 0.8rem; animation: fadeIn 0.3s, fadeOut 0.3s 2.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        @media print { .add-btn, .upload-btn, .print-fab, .icon-btn { display: none !important; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h2>Urban Casa</h2>
+        <input type="text" id="project-name" placeholder="Client Name / Project Id" style="width: 300px; font-size: 1rem;">
+        <div style="display: flex; gap: 10px;">
+            <button onclick="saveToLocalStorage()" class="icon-btn" title="Save">💾</button>
+            <button onclick="loadFromLocalStorage()" class="icon-btn" title="Search">🔍</button>
+        </div>
+    </div>
+
+    <div class="order-section">
+        <div class="section-title">Laminate Specifications</div>
+        <table id="lam-table"><thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Qty</th><th>Pic</th></tr></thead><tbody>
+        <tr><td><input type="text" placeholder="Ground Floor-Kitchen"></td><td><input type="text" placeholder="Base Unit"></td><td><input type="text" placeholder="Inner / Outer"></td><td><input type="text" placeholder="Green Laminate"></td><td><input type="text" placeholder="Sm-1234"></td><td><input type="text" placeholder="0"></td><td><img class="img-preview"><label class="upload-btn">Upload<input type="file" onchange="previewFile(this)" style="display:none"></label></td></tr>
+        </tbody></table><button class="add-btn" onclick="addRow('lam-table')">+ Add New</button>
+    </div>
+
+    <div class="order-section">
+        <div class="section-title">Edge Banding Details</div>
+        <table id="eb-table"><thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Size</th><th>Qty</th><th>Pic</th></tr></thead><tbody>
+        <tr><td><input type="text" placeholder="Ground Floor-Kitchen"></td><td><input type="text" placeholder="Base Unit"></td><td><input type="text" placeholder="Inner / Outer"></td><td><input type="text" placeholder="Green Laminate"></td><td><input type="text" placeholder="Sm-1234"></td><td><input type="text" placeholder="2.0mm"></td><td><input type="text" placeholder="0"></td><td><img class="img-preview"><label class="upload-btn">Upload<input type="file" onchange="previewFile(this)" style="display:none"></label></td></tr>
+        </tbody></table><button class="add-btn" onclick="addRow('eb-table')">+ Add New</button>
+    </div>
+
+    <div class="order-section">
+        <div class="section-title">Profile Handles & Glass</div>
+        <table id="glass-table"><thead><tr><th>Location</th><th>Unit</th><th>Item</th><th>Brand</th><th>Code / Finish</th><th>Qty</th><th>Pic</th></tr></thead><tbody>
+        <tr><td><input type="text" placeholder="Ground Floor-Kitchen"></td><td><input type="text" placeholder="Base Unit"></td><td><input type="text" placeholder="Profile/Glass"></td><td><input type="text" placeholder="Brand"></td><td><input type="text" placeholder="Matte Black"></td><td><input type="text" placeholder="0"></td><td><img class="img-preview"><label class="upload-btn">Upload<input type="file" onchange="previewFile(this)" style="display:none"></label></td></tr>
+        </tbody></table><button class="add-btn" onclick="addRow('glass-table')">+ Add New</button>
+    </div>
+
+    <div class="notes-section">
+        <div class="section-title">Notes / Remarks</div>
+        <textarea id="project-notes" placeholder="Add Special Instructions Here..."></textarea>
+    </div>
+
+    <div class="signature-section">
+        <div class="sig-box">Client Signature</div>
+        <div class="sig-box">Manager Signature</div>
+    </div>
+</div>
+
+<div id="toast-container" style="position: fixed; bottom: 20px; left: 20px; z-index: 2000;"></div>
+<div class="print-fab" onclick="window.print()" title="Print">🖨️</div>
+
+<script>
+    function previewFile(input) {
+        const file = input.files[0];
+        const preview = input.closest('td').querySelector('.img-preview');
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = function () { preview.src = reader.result; preview.style.display = "block"; }
+            reader.readAsDataURL(file);
+        }
+    }
+    function addRow(tableId) {
+        const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+        const newRow = table.rows[0].cloneNode(true);
+        newRow.querySelectorAll('input').forEach(i => i.value = "");
+        newRow.querySelector('.img-preview').style.display = "none";
+        table.appendChild(newRow);
+    }
+    function showToast(msg) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div'); toast.className = 'toast'; toast.innerText = msg;
+        container.appendChild(toast); setTimeout(() => toast.remove(), 3000);
+    }
+    function getTableData(id) { return Array.from(document.querySelectorAll(`#${id} tbody tr`)).map(r => Array.from(r.querySelectorAll('input')).map(i => i.value)); }
+    function saveToLocalStorage() {
+        const name = document.getElementById('project-name').value;
+        if (!name) return showToast("⚠️ Enter Project Id");
+        const data = { notes: document.getElementById('project-notes').value, lam: getTableData('lam-table'), eb: getTableData('eb-table'), glass: getTableData('glass-table') };
+        localStorage.setItem(name, JSON.stringify(data));
+        showToast("✅ Project Saved!");
+    }
+    function loadFromLocalStorage() {
+        const name = prompt("Enter Project Id To Load:");
+        const raw = localStorage.getItem(name);
+        if (!raw) return showToast("❌ Project Not Found.");
+        const data = JSON.parse(raw);
+        document.getElementById('project-notes').value = data.notes;
+        ['lam-table', 'eb-table', 'glass-table'].forEach((id, idx) => {
+            const body = document.querySelector(`#${id} tbody`);
+            body.innerHTML = "";
+            const key = ['lam', 'eb', 'glass'][idx];
+            data[key].forEach(rowVals => {
+                addRow(id);
+                const inputs = body.lastElementChild.querySelectorAll('input');
+                rowVals.forEach((v, i) => { if(inputs[i]) inputs[i].value = v; });
+            });
+        });
+        showToast("📂 Project Loaded!");
+    }
+</script>
+</body>
+</html>
