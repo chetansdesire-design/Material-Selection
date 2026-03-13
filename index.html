@@ -32,7 +32,25 @@
         
         .icon-btn { background: none; border: 1px solid var(--border-color); padding: 8px; border-radius: 8px; cursor: pointer; }
         .add-btn { background: var(--white); color: var(--vibrant-blue); border: 1px solid var(--vibrant-blue); padding: 5px 15px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
-        .img-preview { width: 40px; height: 30px; background: #e2e8f0; border-radius: 4px; object-fit: cover; display: none; margin-top: 5px; }
+        
+        /* New Styles for Row Action Buttons */
+        .action-cell { white-space: nowrap; width: 80px; text-align: center; }
+        .row-action-btn { background: var(--white); border: 1px solid var(--border-color); color: var(--text-light); border-radius: 4px; padding: 4px 6px; cursor: pointer; font-size: 0.7rem; transition: all 0.2s; margin: 0 2px; }
+        .row-action-btn:hover { background: var(--vibrant-blue); color: var(--white); border-color: var(--vibrant-blue); }
+        .del-btn:hover { background: #ef4444; border-color: #ef4444; color: white; }
+
+        .img-preview { 
+            width: 60px; 
+            height: 45px; 
+            background: #e2e8f0; 
+            border-radius: 4px; 
+            object-fit: cover; 
+            display: none; 
+            margin-top: 5px; 
+            cursor: pointer; 
+            border: 1px solid var(--border-color);
+        }
+        
         .upload-btn { font-size: 0.65rem; font-weight: 700; color: var(--vibrant-blue); cursor: pointer; text-transform: uppercase; }
         textarea { width: 100%; height: 80px; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; font-family: inherit; resize: none; box-sizing: border-box; }
         
@@ -40,9 +58,16 @@
         .sig-box { border-top: 2px solid var(--text-dark); width: 200px; text-align: center; padding-top: 10px; font-size: 0.8rem; font-weight: 600; }
         .print-fab { position: fixed; bottom: 30px; right: 30px; background: var(--vibrant-blue); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0, 97, 255, 0.4); cursor: pointer; font-size: 20px; z-index: 1000; }
         .toast { background: var(--text-dark); color: white; padding: 12px 20px; border-radius: 10px; margin-bottom: 10px; font-size: 0.8rem; animation: fadeIn 0.3s, fadeOut 0.3s 2.5s; }
+        
+        .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+        .modal-content { margin: 5% auto; display: block; max-width: 90%; max-height: 80vh; border-radius: 10px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); animation: zoomIn 0.3s ease; }
+        .close-modal { position: absolute; top: 20px; right: 35px; color: #ffffff; font-size: 40px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
+        .close-modal:hover { color: var(--vibrant-blue); }
+        
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-        @media print { .add-btn, .upload-btn, .print-fab, .icon-btn { display: none !important; } }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @media print { .add-btn, .upload-btn, .print-fab, .icon-btn, .action-cell, th:last-child { display: none !important; } }
     </style>
 </head>
 <body>
@@ -52,30 +77,82 @@
         <h2>Urban Casa</h2>
         <input type="text" id="project-name" placeholder="Client Name / Project Id" style="width: 300px; font-size: 1rem;">
         <div style="display: flex; gap: 10px;">
-            <button onclick="saveToLocalStorage()" class="icon-btn" title="Save">💾</button>
-            <button onclick="loadFromLocalStorage()" class="icon-btn" title="Search">🔍</button>
+            <button onclick="saveToCloud()" class="icon-btn" title="Save to Drive">💾</button>
+            <button onclick="loadFromCloud()" class="icon-btn" title="Search Drive">🔍</button>
         </div>
     </div>
 
     <div class="order-section">
         <div class="section-title">Laminate Specifications</div>
-        <table id="lam-table"><thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Qty</th><th>Pic</th></tr></thead><tbody>
-        <tr><td><input type="text" placeholder="Ground Floor-Kitchen"></td><td><input type="text" placeholder="Base Unit"></td><td><input type="text" placeholder="Inner / Outer"></td><td><input type="text" placeholder="Green Laminate"></td><td><input type="text" placeholder="Sm-1234"></td><td><input type="text" placeholder="0"></td><td><img class="img-preview"><label class="upload-btn">Upload<input type="file" onchange="previewFile(this)" style="display:none"></label></td></tr>
-        </tbody></table><button class="add-btn" onclick="addRow('lam-table')">+ Add New</button>
+        <table id="lam-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Qty</th><th>Pic</th><th>Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="Ground Floor-Kitchen"></td>
+                    <td><input type="text" placeholder="Base Unit"></td>
+                    <td><input type="text" placeholder="Inner / Outer"></td>
+                    <td><input type="text" placeholder="Green Laminate"></td>
+                    <td><input type="text" placeholder="Sm-1234"></td>
+                    <td><input type="text" placeholder="0"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell">
+                        <button class="row-action-btn" onclick="moveRowUp(this)" title="Move Up">↑</button>
+                        <button class="row-action-btn" onclick="moveRowDown(this)" title="Move Down">↓</button>
+                        <button class="row-action-btn del-btn" onclick="deleteRow(this)" title="Delete Row">✖</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('lam-table')">+ Add New</button>
     </div>
 
     <div class="order-section">
         <div class="section-title">Edge Banding Details</div>
-        <table id="eb-table"><thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Size</th><th>Qty</th><th>Pic</th></tr></thead><tbody>
-        <tr><td><input type="text" placeholder="Ground Floor-Kitchen"></td><td><input type="text" placeholder="Base Unit"></td><td><input type="text" placeholder="Inner / Outer"></td><td><input type="text" placeholder="Green Laminate"></td><td><input type="text" placeholder="Sm-1234"></td><td><input type="text" placeholder="2.0mm"></td><td><input type="text" placeholder="0"></td><td><img class="img-preview"><label class="upload-btn">Upload<input type="file" onchange="previewFile(this)" style="display:none"></label></td></tr>
-        </tbody></table><button class="add-btn" onclick="addRow('eb-table')">+ Add New</button>
+        <table id="eb-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Size</th><th>Qty</th><th>Pic</th><th>Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="Ground Floor-Kitchen"></td>
+                    <td><input type="text" placeholder="Base Unit"></td>
+                    <td><input type="text" placeholder="Inner / Outer"></td>
+                    <td><input type="text" placeholder="Green Laminate"></td>
+                    <td><input type="text" placeholder="Sm-1234"></td>
+                    <td><input type="text" placeholder="2.0mm"></td>
+                    <td><input type="text" placeholder="0"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell">
+                        <button class="row-action-btn" onclick="moveRowUp(this)" title="Move Up">↑</button>
+                        <button class="row-action-btn" onclick="moveRowDown(this)" title="Move Down">↓</button>
+                        <button class="row-action-btn del-btn" onclick="deleteRow(this)" title="Delete Row">✖</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('eb-table')">+ Add New</button>
     </div>
 
     <div class="order-section">
         <div class="section-title">Profile Handles & Glass</div>
-        <table id="glass-table"><thead><tr><th>Location</th><th>Unit</th><th>Item</th><th>Brand</th><th>Code / Finish</th><th>Qty</th><th>Pic</th></tr></thead><tbody>
-        <tr><td><input type="text" placeholder="Ground Floor-Kitchen"></td><td><input type="text" placeholder="Base Unit"></td><td><input type="text" placeholder="Profile/Glass"></td><td><input type="text" placeholder="Brand"></td><td><input type="text" placeholder="Matte Black"></td><td><input type="text" placeholder="0"></td><td><img class="img-preview"><label class="upload-btn">Upload<input type="file" onchange="previewFile(this)" style="display:none"></label></td></tr>
-        </tbody></table><button class="add-btn" onclick="addRow('glass-table')">+ Add New</button>
+        <table id="glass-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Item</th><th>Brand</th><th>Code / Finish</th><th>Qty</th><th>Pic</th><th>Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="Ground Floor-Kitchen"></td>
+                    <td><input type="text" placeholder="Base Unit"></td>
+                    <td><input type="text" placeholder="Profile/Glass"></td>
+                    <td><input type="text" placeholder="Brand"></td>
+                    <td><input type="text" placeholder="Matte Black"></td>
+                    <td><input type="text" placeholder="0"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell">
+                        <button class="row-action-btn" onclick="moveRowUp(this)" title="Move Up">↑</button>
+                        <button class="row-action-btn" onclick="moveRowDown(this)" title="Move Down">↓</button>
+                        <button class="row-action-btn del-btn" onclick="deleteRow(this)" title="Delete Row">✖</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('glass-table')">+ Add New</button>
     </div>
 
     <div class="notes-section">
@@ -92,53 +169,204 @@
 <div id="toast-container" style="position: fixed; bottom: 20px; left: 20px; z-index: 2000;"></div>
 <div class="print-fab" onclick="window.print()" title="Print">🖨️</div>
 
+<div id="image-modal" class="modal" onclick="closeModal()">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="modal-img">
+</div>
+
 <script>
+    // --- UI FUNCTIONS ---
+    function openModal(imgSrc) {
+        const modal = document.getElementById("image-modal");
+        document.getElementById("modal-img").src = imgSrc;
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("image-modal").style.display = "none";
+    }
+
     function previewFile(input) {
         const file = input.files[0];
         const preview = input.closest('td').querySelector('.img-preview');
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = function () { preview.src = reader.result; preview.style.display = "block"; }
+            reader.onloadend = function () { 
+                preview.src = reader.result; 
+                preview.style.display = "block"; 
+                preview.onclick = function(e) { 
+                    e.stopPropagation(); 
+                    openModal(this.src); 
+                };
+            }
             reader.readAsDataURL(file);
         }
     }
+
+    function showToast(msg) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div'); 
+        toast.className = 'toast'; 
+        toast.innerText = msg;
+        container.appendChild(toast); 
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // --- ROW CONTROLS ---
     function addRow(tableId) {
         const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
         const newRow = table.rows[0].cloneNode(true);
-        newRow.querySelectorAll('input').forEach(i => i.value = "");
+        newRow.querySelectorAll('input[type="text"]').forEach(i => i.value = "");
         newRow.querySelector('.img-preview').style.display = "none";
+        newRow.querySelector('.img-preview').src = "";
         table.appendChild(newRow);
     }
-    function showToast(msg) {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div'); toast.className = 'toast'; toast.innerText = msg;
-        container.appendChild(toast); setTimeout(() => toast.remove(), 3000);
+
+    function moveRowUp(btn) {
+        const row = btn.closest('tr');
+        const prevRow = row.previousElementSibling;
+        if (prevRow) {
+            row.parentNode.insertBefore(row, prevRow);
+        }
     }
-    function getTableData(id) { return Array.from(document.querySelectorAll(`#${id} tbody tr`)).map(r => Array.from(r.querySelectorAll('input')).map(i => i.value)); }
-    function saveToLocalStorage() {
-        const name = document.getElementById('project-name').value;
-        if (!name) return showToast("⚠️ Enter Project Id");
-        const data = { notes: document.getElementById('project-notes').value, lam: getTableData('lam-table'), eb: getTableData('eb-table'), glass: getTableData('glass-table') };
-        localStorage.setItem(name, JSON.stringify(data));
-        showToast("✅ Project Saved!");
+
+    function moveRowDown(btn) {
+        const row = btn.closest('tr');
+        const nextRow = row.nextElementSibling;
+        if (nextRow) {
+            row.parentNode.insertBefore(nextRow, row);
+        }
     }
-    function loadFromLocalStorage() {
-        const name = prompt("Enter Project Id To Load:");
-        const raw = localStorage.getItem(name);
-        if (!raw) return showToast("❌ Project Not Found.");
-        const data = JSON.parse(raw);
-        document.getElementById('project-notes').value = data.notes;
-        ['lam-table', 'eb-table', 'glass-table'].forEach((id, idx) => {
-            const body = document.querySelector(`#${id} tbody`);
-            body.innerHTML = "";
-            const key = ['lam', 'eb', 'glass'][idx];
-            data[key].forEach(rowVals => {
-                addRow(id);
-                const inputs = body.lastElementChild.querySelectorAll('input');
-                rowVals.forEach((v, i) => { if(inputs[i]) inputs[i].value = v; });
+
+    function deleteRow(btn) {
+        const row = btn.closest('tr');
+        const tbody = row.parentNode;
+        // Check if it's the last row. If so, just clear it so we don't break the 'Add New' feature
+        if (tbody.querySelectorAll('tr').length > 1) {
+            row.remove();
+        } else {
+            row.querySelectorAll('input[type="text"]').forEach(i => i.value = "");
+            row.querySelector('.img-preview').style.display = "none";
+            row.querySelector('.img-preview').src = "";
+            showToast("🧹 Row cleared (cannot delete the last row).");
+        }
+    }
+
+    // --- DATA FUNCTIONS ---
+    function getTableData(id) { 
+        return Array.from(document.querySelectorAll(`#${id} tbody tr`)).map(r => {
+            const inputs = Array.from(r.querySelectorAll('input[type="text"]')).map(i => i.value);
+            const img = r.querySelector('.img-preview');
+            const imgSrc = (img && img.style.display !== "none") ? img.src : "";
+            return { inputs: inputs, imgSrc: imgSrc };
+        }); 
+    }
+
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFEgdzxL4Hkbp8H6drBzjaNHnEJ0QQkliwsqLUTGNHzQu7i9m0iLhh_ITUmQXO7RRgtQ/exec";
+
+    // --- SAVE TO CLOUD ---
+    async function saveToCloud() {
+        const projectId = document.getElementById('project-name').value;
+        if (!projectId) return showToast("⚠️ Enter Project Id");
+
+        showToast("⏳ Saving to Drive...");
+
+        const notes = document.getElementById('project-notes').value;
+        const lamData = getTableData('lam-table');
+        const ebData = getTableData('eb-table');
+        const glassData = getTableData('glass-table');
+
+        let firstImage = "";
+        if (lamData.length > 0 && lamData[0].imgSrc) {
+            firstImage = lamData[0].imgSrc;
+        }
+
+        const payload = {
+            projectId: projectId,
+            notes: notes,
+            lam: lamData,
+            eb: ebData,
+            glass: glassData,
+            imgData: firstImage
+        };
+
+        try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'text/plain' }, 
+                body: JSON.stringify(payload)
             });
-        });
-        showToast("📂 Project Loaded!");
+            showToast("✅ Project Saved to Drive!");
+        } catch (error) {
+            showToast("❌ Network error. Check console.");
+            console.error(error);
+        }
+    }
+
+    // --- LOAD FROM CLOUD ---
+    async function loadFromCloud() {
+        const name = prompt("Enter Project Id To Load:");
+        if (!name) return;
+
+        showToast("🔍 Searching Database...");
+
+        try {
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?projectId=${encodeURIComponent(name)}`);
+            const result = await response.json();
+
+            if (result.status === "success") {
+                document.getElementById('project-notes').value = result.notes || "";
+                document.getElementById('project-name').value = name;
+
+                ['lam-table', 'eb-table', 'glass-table'].forEach((id, idx) => {
+                    const body = document.querySelector(`#${id} tbody`);
+                    const key = ['lam', 'eb', 'glass'][idx];
+                    const tableData = result[key];
+
+                    const templateRow = body.rows[0].cloneNode(true);
+                    templateRow.querySelectorAll('input[type="text"]').forEach(i => i.value = "");
+                    const templateImg = templateRow.querySelector('.img-preview');
+                    templateImg.style.display = "none";
+                    templateImg.src = "";
+
+                    body.innerHTML = "";
+
+                    if (tableData && tableData.length > 0) {
+                        tableData.forEach(rowData => {
+                            const newRow = templateRow.cloneNode(true);
+                            const inputs = newRow.querySelectorAll('input[type="text"]');
+
+                            if (rowData.inputs) {
+                                rowData.inputs.forEach((v, i) => { if(inputs[i]) inputs[i].value = v; });
+                            }
+
+                            if (rowData.imgSrc) {
+                                const img = newRow.querySelector('.img-preview');
+                                img.src = rowData.imgSrc;
+                                img.style.display = "block";
+                                img.onclick = function(e) {
+                                    e.stopPropagation();
+                                    openModal(this.src);
+                                };
+                            }
+                            body.appendChild(newRow);
+                        });
+                    } else {
+                        body.appendChild(templateRow);
+                    }
+                });
+                showToast("📂 Project Loaded!");
+            } else if (result.status === "not_found") {
+                showToast("❌ Project Not Found.");
+            } else {
+                showToast("❌ Error loading project.");
+                console.error(result.message);
+            }
+        } catch (error) {
+            showToast("❌ Network error. Check console.");
+            console.error(error);
+        }
     }
 </script>
 </body>
