@@ -19,74 +19,46 @@
         /* Base UI Styles */
         body { background-color: var(--soft-bg); color: var(--text-dark); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; font-size: 0.85rem; }
         .container { max-width: 1400px; margin: auto; }
-        .header-card { background: var(--white); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border: 1px solid var(--border-color); }
-        h2 { margin: 0; font-size: 1.4rem; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
         
+        /* --------------------------------- */
+        /* LOGIN SCREEN STYLES               */
+        /* --------------------------------- */
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--soft-bg); z-index: 99999; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s; }
+        .login-box { background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); text-align: center; width: 320px; border: 1px solid var(--border-color); }
+        .login-box h2 { margin: 0; font-size: 1.8rem; }
+        .login-input { border: 2px solid var(--border-color); padding: 12px 15px; border-radius: 10px; margin: 25px 0 15px 0; width: 100%; box-sizing: border-box; text-transform: none; text-align: center; font-size: 1.2rem; outline: none; transition: border-color 0.2s; }
+        .login-input:focus { border-color: var(--vibrant-blue); }
+        .login-btn { background: var(--vibrant-blue); color: white; border: none; padding: 14px 20px; border-radius: 10px; width: 100%; font-size: 1rem; font-weight: 800; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 97, 255, 0.3); }
+        .error-msg { color: #ef4444; font-size: 0.85rem; margin-top: 10px; font-weight: 700; display: none; }
+
+        .header-card { background: var(--white); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border: 1px solid var(--border-color); }
+        h2 { margin: 0; font-size: 1.6rem; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; line-height: 1; }
+        .brand-subtext { font-size: 0.7rem; color: var(--text-light); margin-top: 6px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+
         .order-section, .notes-section { background: var(--white); border-radius: 20px; padding: 20px; margin-bottom: 30px; border: 1px solid var(--border-color); }
         
-        /* CATEGORY HEADERS WITH BACKGROUND COLOURS */
         .section-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; padding: 10px 15px; border-radius: 8px; }
         .section-title::before { content: ""; width: 5px; height: 18px; border-radius: 10px; }
+        .title-lam { background-color: #eff6ff; color: #1e40af; } .title-lam::before { background: #3b82f6; }
+        .title-eb { background-color: #f0fdf4; color: #166534; } .title-eb::before { background: #22c55e; }
+        .title-glass { background-color: #faf5ff; color: #6b21a8; } .title-glass::before { background: #a855f7; }
+        .title-notes { background-color: #fffbeb; color: #b45309; } .title-notes::before { background: #f59e0b; }
         
-        .title-lam { background-color: #eff6ff; color: #1e40af; }
-        .title-lam::before { background: #3b82f6; }
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
         
-        .title-eb { background-color: #f0fdf4; color: #166534; }
-        .title-eb::before { background: #22c55e; }
-        
-        .title-glass { background-color: #faf5ff; color: #6b21a8; }
-        .title-glass::before { background: #a855f7; }
-
-        .title-notes { background-color: #fffbeb; color: #b45309; }
-        .title-notes::before { background: #f59e0b; }
-        
-        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
-        
-        /* CENTER ALIGNMENT APPLIED HERE */
+        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; min-width: 800px; }
         th { text-align: center; font-size: 0.7rem; color: var(--text-light); padding: 10px; text-transform: uppercase; }
         td { background: var(--soft-bg); padding: 8px 10px; border: 1px solid var(--border-color); vertical-align: middle; text-align: center; }
         
-        /* ALL CAPS AND CENTERED INPUTS */
-        input, textarea { 
-            text-transform: uppercase; 
-            text-align: center; 
-            border: none; 
-            background: transparent; 
-            width: 100%; 
-            font-family: inherit; 
-            font-size: 0.85rem; 
-            font-weight: 700; 
-            outline: none; 
-            color: var(--text-dark);
-        }
-        
-        /* TINY, LOW-OPACITY GUIDANCE TEXT (PLACEHOLDERS) */
-        input::placeholder, textarea::placeholder {
-            font-size: 0.65rem;
-            color: var(--text-light);
-            opacity: 0.4;
-            font-weight: 600;
-        }
-
+        input[type="text"], textarea { text-transform: uppercase; text-align: center; border: none; background: transparent; width: 100%; font-family: inherit; font-size: 0.85rem; font-weight: 700; outline: none; color: var(--text-dark); }
+        input::placeholder, textarea::placeholder { font-size: 0.65rem; color: var(--text-light); opacity: 0.4; font-weight: 600; }
         textarea { width: 100%; height: 80px; border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; resize: none; box-sizing: border-box; background: var(--white); text-align: left; }
         textarea::placeholder { text-align: left; }
         
-        /* Image Preview Center alignment fix & Zoom styling */
-        .img-preview { 
-            width: 150px; 
-            height: 110px; 
-            background: #e2e8f0; 
-            border-radius: 8px; 
-            object-fit: cover; 
-            display: none; 
-            margin: 5px auto 0 auto; 
-            cursor: zoom-in; 
-            border: 1px solid var(--border-color);
-            transition: transform 0.2s;
-        }
+        .img-preview { width: 120px; height: 80px; background: #e2e8f0; border-radius: 8px; object-fit: cover; display: none; margin: 5px auto 0 auto; cursor: zoom-in; border: 1px solid var(--border-color); transition: transform 0.2s; }
         .img-preview:hover { transform: scale(1.05); }
         
-        /* Buttons */
         .icon-btn { background: var(--white); border: 1px solid var(--border-color); padding: 10px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
         .icon-btn:hover { background: var(--soft-bg); transform: translateY(-2px); }
         .add-btn { background: var(--white); color: var(--vibrant-blue); border: 1px solid var(--vibrant-blue); padding: 8px 20px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer; margin-top: 10px; display: block; margin-left: auto; margin-right: auto; transition: 0.2s; }
@@ -97,43 +69,70 @@
 
         .signature-section { display: flex; justify-content: space-between; margin-top: 50px; padding: 0 40px; }
         .sig-box { border-top: 2px solid var(--text-dark); width: 220px; text-align: center; padding-top: 10px; font-weight: 700; text-transform: uppercase; }
-        .print-fab { position: fixed; bottom: 30px; right: 30px; background: var(--vibrant-blue); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0, 97, 255, 0.3); cursor: pointer; font-size: 24px; z-index: 1000; }
+        .print-fab { position: fixed; bottom: 30px; right: 30px; background: var(--vibrant-blue); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0, 97, 255, 0.3); cursor: pointer; font-size: 24px; z-index: 1000; transition: transform 0.2s; }
+        .print-fab:hover { transform: scale(1.1); }
 
-        /* --------------------------------- */
-        /* PRINT STYLES - FORCE GRAPHICS     */
-        /* --------------------------------- */
+        /* MOBILE VIEW */
+        @media screen and (max-width: 992px) {
+            body { padding: 10px; }
+            .header-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            #project-name { width: 100% !important; font-size: 1.1rem; }
+            .header-card > div:last-child { width: 100%; display: flex; justify-content: space-between; }
+            .icon-btn { flex: 1; text-align: center; }
+            .signature-section { flex-direction: column; gap: 40px; align-items: center; padding: 0; }
+        }
+
+        /* PRINT STYLES */
         @media print {
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important; 
-            }
-            @page { size: landscape; margin: 10mm; }
-            body { background: white; padding: 0; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            @page { size: A4 landscape; margin: 10mm; }
+            body { background: white !important; padding: 0; font-size: 10pt; color: black; }
             
-            .header-card { box-shadow: none; border: none; border-bottom: 2px solid black; border-radius: 0; padding: 10px 0; background: transparent !important; margin-bottom: 20px; }
+            #login-overlay { display: none !important; } /* Hide login screen when printing */
+            
+            .header-card { box-shadow: none; border: none; border-bottom: 2px solid black; border-radius: 0; padding: 0 0 10px 0; background: transparent !important; margin-bottom: 20px; flex-direction: row; }
             h2 { -webkit-text-fill-color: black !important; }
+            #project-name { border: none !important; font-weight: 800; color: black; font-size: 14pt; text-align: right; width: 300px !important; }
             
             .add-btn, .upload-btn, .print-fab, .icon-btn, .action-cell, th:last-child { display: none !important; }
             
-            .order-section, .notes-section { border: none !important; break-inside: avoid; border-radius: 0; background: transparent !important; padding: 0 !important; margin-bottom: 25px; }
+            .order-section, .notes-section { border: none !important; background: transparent !important; padding: 0 !important; margin-bottom: 20px; box-shadow: none; }
             
-            .section-title { border: 1px solid #e2e8f0; }
+            .table-responsive { overflow: visible !important; }
+            table { border-collapse: collapse !important; width: 100%; border-spacing: 0; min-width: auto; }
+            th, td { border: 1px solid #94a3b8 !important; padding: 6px 4px !important; background: white !important; }
+            th { background: #f1f5f9 !important; color: black !important; font-weight: 800; border-bottom: 2px solid #64748b !important; }
             
-            td { background: white !important; border: 1px solid #cbd5e1 !important; padding: 12px 8px; }
-            th { background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; }
-            
+            tr { break-inside: avoid; page-break-inside: avoid; }
+            input[type="text"], textarea { border: none !important; background: transparent !important; color: black !important; outline: none; box-shadow: none; height: auto; padding: 0; }
             input::placeholder, textarea::placeholder { color: transparent !important; }
             
-            .img-preview { display: block !important; width: 140px; height: auto; border: 1px solid #e2e8f0; }
-            textarea { border: 1px solid #cbd5e1 !important; }
+            textarea { overflow: visible !important; height: auto !important; border: 1px solid #94a3b8 !important; padding: 10px !important; border-radius: 0 !important; }
+            .img-preview { display: block !important; max-width: 100px !important; max-height: 70px !important; border: none; margin: auto; object-fit: contain; }
+            
+            .section-title { border: 1px solid #94a3b8; border-bottom: none; border-radius: 0; margin-bottom: 0; font-size: 10pt; }
+            .signature-section { margin-top: 30px; page-break-inside: avoid; padding: 0 20px; flex-direction: row; }
         }
     </style>
 </head>
-<body>
+<body onload="checkAuth()">
+
+<div id="login-overlay">
+    <div class="login-box">
+        <h2>Urban Casa</h2>
+        <div class="brand-subtext">Authorized Personnel Only</div>
+        <input type="password" id="login-pwd" class="login-input" placeholder="Enter Password" onkeypress="handleKey(event)">
+        <button class="login-btn" onclick="verifyPassword()">UNLOCK</button>
+        <div id="login-error" class="error-msg">Incorrect Password. Try again.</div>
+    </div>
+</div>
 
 <div class="container">
     <div class="header-card">
-        <h2>Urban Casa</h2>
+        <div>
+            <h2>Urban Casa</h2>
+            <div class="brand-subtext">Raichandani Mall - Kompally | www.urban-casa.in</div>
+        </div>
         <input type="text" id="project-name" placeholder="CLIENT NAME / PROJECT ID" style="width: 350px; font-size: 1.2rem; border-bottom: 1px dashed var(--border-color); text-align: left;">
         <div style="display: flex; gap: 10px;">
             <button onclick="resetForm()" class="icon-btn" title="New Project">➕</button>
@@ -144,74 +143,80 @@
 
     <div class="order-section">
         <div class="section-title title-lam">Laminate Specifications</div>
-        <table id="lam-table">
-            <thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
-            <tbody>
-                <tr>
-                    <td><input type="text" placeholder="LOCATION"></td>
-                    <td><input type="text" placeholder="UNIT"></td>
-                    <td><input type="text" placeholder="INNER/OUTER"></td>
-                    <td><input type="text" placeholder="BRAND"></td>
-                    <td><input type="text" placeholder="CODE"></td>
-                    <td><input type="text" placeholder="0" style="width: 60px;"></td>
-                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
-                    <td class="action-cell">
-                        <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
-                        <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
-                        <button class="row-action-btn del-btn" onclick="deleteRow(this)">✖</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="lam-table">
+                <thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" placeholder="LOCATION"></td>
+                        <td><input type="text" placeholder="UNIT"></td>
+                        <td><input type="text" placeholder="INNER/OUTER"></td>
+                        <td><input type="text" placeholder="BRAND"></td>
+                        <td><input type="text" placeholder="CODE"></td>
+                        <td><input type="text" placeholder="0" style="width: 60px;"></td>
+                        <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                        <td class="action-cell">
+                            <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
+                            <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
+                            <button class="row-action-btn del-btn" onclick="deleteRow(this)">✖</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <button class="add-btn" onclick="addRow('lam-table')">+ Add Row</button>
     </div>
 
     <div class="order-section">
         <div class="section-title title-eb">Edge Banding Details</div>
-        <table id="eb-table">
-            <thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Size</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
-            <tbody>
-                <tr>
-                    <td><input type="text" placeholder="LOCATION"></td>
-                    <td><input type="text" placeholder="UNIT"></td>
-                    <td><input type="text" placeholder="TYPE"></td>
-                    <td><input type="text" placeholder="BRAND"></td>
-                    <td><input type="text" placeholder="CODE"></td>
-                    <td><input type="text" placeholder="2.0MM"></td>
-                    <td><input type="text" placeholder="0" style="width: 60px;"></td>
-                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
-                    <td class="action-cell">
-                        <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
-                        <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
-                        <button class="row-action-btn del-btn" onclick="deleteRow(this)">✖</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="eb-table">
+                <thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Size</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" placeholder="LOCATION"></td>
+                        <td><input type="text" placeholder="UNIT"></td>
+                        <td><input type="text" placeholder="TYPE"></td>
+                        <td><input type="text" placeholder="BRAND"></td>
+                        <td><input type="text" placeholder="CODE"></td>
+                        <td><input type="text" placeholder="2.0MM"></td>
+                        <td><input type="text" placeholder="0" style="width: 60px;"></td>
+                        <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                        <td class="action-cell">
+                            <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
+                            <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
+                            <button class="row-action-btn del-btn" onclick="deleteRow(this)">✖</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <button class="add-btn" onclick="addRow('eb-table')">+ Add Row</button>
     </div>
 
     <div class="order-section">
         <div class="section-title title-glass">Profile Handles & Glass</div>
-        <table id="glass-table">
-            <thead><tr><th>Location</th><th>Unit</th><th>Item</th><th>Brand</th><th>Code / Finish</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
-            <tbody>
-                <tr>
-                    <td><input type="text" placeholder="LOCATION"></td>
-                    <td><input type="text" placeholder="UNIT"></td>
-                    <td><input type="text" placeholder="ITEM"></td>
-                    <td><input type="text" placeholder="BRAND"></td>
-                    <td><input type="text" placeholder="FINISH"></td>
-                    <td><input type="text" placeholder="0" style="width: 60px;"></td>
-                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
-                    <td class="action-cell">
-                        <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
-                        <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
-                        <button class="row-action-btn del-btn" onclick="deleteRow(this)">✖</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="glass-table">
+                <thead><tr><th>Location</th><th>Unit</th><th>Item</th><th>Brand</th><th>Code / Finish</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" placeholder="LOCATION"></td>
+                        <td><input type="text" placeholder="UNIT"></td>
+                        <td><input type="text" placeholder="ITEM"></td>
+                        <td><input type="text" placeholder="BRAND"></td>
+                        <td><input type="text" placeholder="FINISH"></td>
+                        <td><input type="text" placeholder="0" style="width: 60px;"></td>
+                        <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                        <td class="action-cell">
+                            <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
+                            <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
+                            <button class="row-action-btn del-btn" onclick="deleteRow(this)">✖</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <button class="add-btn" onclick="addRow('glass-table')">+ Add Row</button>
     </div>
 
@@ -230,8 +235,32 @@
 <div id="toast-container" style="position: fixed; bottom: 20px; left: 20px; z-index: 2000;"></div>
 
 <script>
-    // --- YOUR SPECIFIC APPS SCRIPT URL IS SET HERE ---
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFEgdzxL4Hkbp8H6drBzjaNHnEJ0QQkliwsqLUTGNHzQu7i9m0iLhh_ITUmQXO7RRgtQ/exec";
+
+    // --- LOGIN LOGIC ---
+    function checkAuth() {
+        if (sessionStorage.getItem('urban_casa_auth') === 'true') {
+            document.getElementById('login-overlay').style.display = 'none';
+        }
+    }
+
+    function verifyPassword() {
+        const pwd = document.getElementById('login-pwd').value;
+        if (pwd === "1996" || pwd === "123") {
+            sessionStorage.setItem('urban_casa_auth', 'true');
+            document.getElementById('login-overlay').style.opacity = '0';
+            setTimeout(() => document.getElementById('login-overlay').style.display = 'none', 300);
+        } else {
+            const errorObj = document.getElementById('login-error');
+            errorObj.style.display = 'block';
+            setTimeout(() => errorObj.style.display = 'none', 3000);
+        }
+    }
+
+    function handleKey(e) {
+        if (e.key === 'Enter') verifyPassword();
+    }
+    // -------------------
 
     function showToast(m) {
         const t = document.createElement('div');
@@ -241,7 +270,6 @@
         setTimeout(() => t.remove(), 3500);
     }
 
-    // 1. IMAGE COMPRESSION & PREVIEW
     function previewFile(input) {
         const file = input.files[0];
         const td = input.closest('td');
@@ -254,7 +282,7 @@
                 img.src = e.target.result;
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 500; // Balances quality and storage size
+                    const MAX_WIDTH = 500;
                     const scale = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scale;
@@ -262,12 +290,9 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                    // Compress to 70% quality JPEG
                     const compressedData = canvas.toDataURL('image/jpeg', 0.7);
                     preview.src = compressedData;
                     preview.style.display = "block";
-                    
-                    // Make it clickable to view full size
                     preview.onclick = () => openFullscreen(compressedData);
                 };
             };
@@ -275,10 +300,9 @@
         }
     }
 
-    // 2. CLICK TO VIEW FULL IMAGE
     function openFullscreen(src) {
         const overlay = document.createElement('div');
-        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out;";
+        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;cursor:zoom-out;";
         overlay.innerHTML = `<img src="${src}" style="max-width:90%;max-height:90%;border-radius:10px;box-shadow:0 0 50px rgba(0,0,0,0.5);">`;
         overlay.onclick = () => overlay.remove();
         document.body.appendChild(overlay);
@@ -292,7 +316,7 @@
         const imgPreview = newRow.querySelector('.img-preview');
         imgPreview.style.display = "none";
         imgPreview.src = "";
-        imgPreview.onclick = null; // reset onclick handler
+        imgPreview.onclick = null;
         tbody.appendChild(newRow);
     }
 
@@ -313,10 +337,12 @@
     }
 
     function resetForm() {
-        if(confirm("START NEW PROJECT? CURRENT DATA WILL BE CLEARED.")) location.reload();
+        if(confirm("START NEW PROJECT? CURRENT DATA WILL BE CLEARED.")) {
+            sessionStorage.removeItem('urban_casa_auth'); // Optional: Logs them out on reset
+            location.reload();
+        }
     }
 
-    // 3. IMPROVED DATA GATHERING
     function getTableData(id) { 
         return Array.from(document.querySelectorAll(`#${id} tbody tr`)).map(r => {
             const inputs = Array.from(r.querySelectorAll('input[type="text"]')).map(i => i.value);
@@ -328,7 +354,6 @@
         }); 
     }
 
-    // 4. SAVE & OVERWRITE LOGIC
     async function saveToCloud() {
         const projectId = document.getElementById('project-name').value;
         if (!projectId) return showToast("⚠️ ENTER PROJECT ID");
@@ -398,7 +423,7 @@
                                 const img = newRow.querySelector('.img-preview');
                                 img.src = rowData.imgSrc;
                                 img.style.display = "block";
-                                img.onclick = () => openFullscreen(rowData.imgSrc); // Restore click-to-zoom
+                                img.onclick = () => openFullscreen(rowData.imgSrc);
                             }
                             body.appendChild(newRow);
                         });
