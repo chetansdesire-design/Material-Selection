@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URBAN CASA | PROJECT SPEC SHEET</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vibrant-blue: #0061ff;
+            --soft-bg: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --accent-gradient: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+        }
+
+        /* Base UI Styles */
+        body { background-color: var(--soft-bg); color: var(--text-dark); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; font-size: 0.85rem; }
+        .container { max-width: 1400px; margin: auto; }
+        .header-card { background: var(--white); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border: 1px solid var(--border-color); }
+        h2 { margin: 0; font-size: 1.4rem; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
+        
+        .order-section, .notes-section { background: var(--white); border-radius: 20px; padding: 20px; margin-bottom: 30px; border: 1px solid var(--border-color); }
+        
+        /* CATEGORY HEADERS WITH BACKGROUND COLOURS */
+        .section-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; padding: 10px 15px; border-radius: 8px; }
+        .section-title::before { content: ""; width: 5px; height: 18px; border-radius: 10px; }
+        
+        .title-lam { background-color: #eff6ff; color: #1e40af; }
+        .title-lam::before { background: #3b82f6; }
+        
+        .title-eb { background-color: #f0fdf4; color: #166534; }
+        .title-eb::before { background: #22c55e; }
+        
+        .title-glass { background-color: #faf5ff; color: #6b21a8; }
+        .title-glass::before { background: #a855f7; }
+
+        .title-notes { background-color: #fffbeb; color: #b45309; }
+        .title-notes::before { background: #f59e0b; }
+        
+        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
+        
+        /* CENTER ALIGNMENT APPLIED HERE */
+        th { text-align: center; font-size: 0.7rem; color: var(--text-light); padding: 10px; text-transform: uppercase; }
+        td { background: var(--soft-bg); padding: 8px 10px; border: 1px solid var(--border-color); vertical-align: middle; text-align: center; }
+        
+        /* ALL CAPS AND CENTERED INPUTS */
+        input, textarea { 
+            text-transform: uppercase; 
+            text-align: center; 
+            border: none; 
+            background: transparent; 
+            width: 100%; 
+            font-family: inherit; 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            outline: none; 
+            color: var(--text-dark);
+        }
+        
+        /* TINY, LOW-OPACITY GUIDANCE TEXT (PLACEHOLDERS) */
+        input::placeholder, textarea::placeholder {
+            font-size: 0.65rem;
+            color: var(--text-light);
+            opacity: 0.4;
+            font-weight: 600;
+        }
+
+        textarea { width: 100%; height: 80px; border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; resize: none; box-sizing: border-box; background: var(--white); text-align: left; }
+        textarea::placeholder { text-align: left; }
+        
+        /* Image Preview Center alignment fix & Zoom styling */
+        .img-preview { 
+            width: 150px; 
+            height: 110px; 
+            background: #e2e8f0; 
+            border-radius: 8px; 
+            object-fit: cover; 
+            display: none; 
+            margin: 5px auto 0 auto; 
+            cursor: zoom-in; 
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+        }
+        .img-preview:hover { transform: scale(1.05); }
+        
+        /* Buttons */
+        .icon-btn { background: var(--white); border: 1px solid var(--border-color); padding: 10px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .icon-btn:hover { background: var(--soft-bg); transform: translateY(-2px); }
+        .add-btn { background: var(--white); color: var(--vibrant-blue); border: 1px solid var(--vibrant-blue); padding: 8px 20px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer; margin-top: 10px; display: block; margin-left: auto; margin-right: auto; transition: 0.2s; }
+        .add-btn:hover { background: var(--vibrant-blue); color: var(--white); }
+        .upload-btn { font-size: 0.65rem; font-weight: 800; color: var(--vibrant-blue); cursor: pointer; text-transform: uppercase; display: block; margin-top: 5px; }
+        .row-action-btn { background: var(--white); border: 1px solid var(--border-color); color: var(--text-light); border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 0.8rem; margin: 0 2px; }
+        .del-btn:hover { background: #ef4444; color: white; border-color: #ef4444; }
+
+        .signature-section { display: flex; justify-content: space-between; margin-top: 50px; padding: 0 40px; }
+        .sig-box { border-top: 2px solid var(--text-dark); width: 220px; text-align: center; padding-top: 10px; font-weight: 700; text-transform: uppercase; }
+        .print-fab { position: fixed; bottom: 30px; right: 30px; background: var(--vibrant-blue); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0, 97, 255, 0.3); cursor: pointer; font-size: 24px; z-index: 1000; }
+
+        /* --------------------------------- */
+        /* PRINT STYLES - FORCE GRAPHICS     */
+        /* --------------------------------- */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; 
+            }
+            @page { size: landscape; margin: 10mm; }
+            body { background: white; padding: 0; }
+            
+            .header-card { box-shadow: none; border: none; border-bottom: 2px solid black; border-radius: 0; padding: 10px 0; background: transparent !important; margin-bottom: 20px; }
+            h2 { -webkit-text-fill-color: black !important; }
+            
+            .add-btn, .upload-btn, .print-fab, .icon-btn, .action-cell, th:last-child { display: none !important; }
+            
+            .order-section, .notes-section { border: none !important; break-inside: avoid; border-radius: 0; background: transparent !important; padding: 0 !important; margin-bottom: 25px; }
+            
+            .section-title { border: 1px solid #e2e8f0; }
+            
+            td { background: white !important; border: 1px solid #cbd5e1 !important; padding: 12px 8px; }
+            th { background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; }
+            
+            input::placeholder, textarea::placeholder { color: transparent !important; }
+            
+            .img-preview { display: block !important; width: 140px; height: auto; border: 1px solid #e2e8f0; }
+            textarea { border: 1px solid #cbd5e1 !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h2>Urban Casa</h2>
+        <input type="text" id="project-name" placeholder="CLIENT NAME / PROJECT ID" style="width: 350px; font-size: 1.2rem; border-bottom: 1px dashed var(--border-color); text-align: left;">
+        <div style="display: flex; gap: 10px;">
+            <button onclick="resetForm()" class="icon-btn" title="New Project">➕</button>
+            <button onclick="saveToCloud()" class="icon-btn" title="Save to Drive">💾</button>
+            <button onclick="loadFromCloud()" class="icon-btn" title="Search Drive">🔍</button>
+        </div>
+    </div>
+
+    <div class="order-section">
+        <div class="section-title title-lam">Laminate Specifications</div>
+        <table id="lam-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="LOCATION"></td>
+                    <td><input type="text" placeholder="UNIT"></td>
+                    <td><input type="text" placeholder="INNER/OUTER"></td>
+                    <td><input type="text" placeholder="BRAND"></td>
+                    <td><input type="text" placeholder="CODE"></td>
+                    <td><input type="text" placeholder="0" style="width: 60px;"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell">
+                        <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
+                        <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
+                        <button class="row-action-btn del-btn" onclick="deleteRow(this)">✖</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('lam-table')">+ Add Row</button>
+    </div>
+
+    <div class="order-section">
+        <div class="section-title title-eb">Edge Banding Details</div>
+        <table id="eb-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Size</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="LOCATION"></td>
+                    <td><input type="text" placeholder="UNIT"></td>
+                    <td><input type="text" placeholder="TYPE"></td>
+                    <td><input type="text" placeholder="BRAND"></td>
+                    <td><input type="text" placeholder="CODE"></td>
+                    <td><input type="text" placeholder="2.0MM"></td>
+                    <td><input type="text" placeholder="0" style="width: 60px;"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell">
+                        <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
+                        <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
+                        <button class="row-action-btn del-btn" onclick="deleteRow(this)">✖</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('eb-table')">+ Add Row</button>
+    </div>
+
+    <div class="order-section">
+        <div class="section-title title-glass">Profile Handles & Glass</div>
+        <table id="glass-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Item</th><th>Brand</th><th>Code / Finish</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="LOCATION"></td>
+                    <td><input type="text" placeholder="UNIT"></td>
+                    <td><input type="text" placeholder="ITEM"></td>
+                    <td><input type="text" placeholder="BRAND"></td>
+                    <td><input type="text" placeholder="FINISH"></td>
+                    <td><input type="text" placeholder="0" style="width: 60px;"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell">
+                        <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
+                        <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
+                        <button class="row-action-btn del-btn" onclick="deleteRow(this)">✖</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('glass-table')">+ Add Row</button>
+    </div>
+
+    <div class="notes-section">
+        <div class="section-title title-notes">Notes / Remarks</div>
+        <textarea id="project-notes" placeholder="ADD SPECIAL INSTRUCTIONS HERE..."></textarea>
+    </div>
+
+    <div class="signature-section">
+        <div class="sig-box">Client Signature</div>
+        <div class="sig-box">Manager Signature</div>
+    </div>
+</div>
+
+<div class="print-fab" onclick="window.print()" title="Print / Save PDF">🖨️</div>
+<div id="toast-container" style="position: fixed; bottom: 20px; left: 20px; z-index: 2000;"></div>
+
+<script>
+    // --- YOUR SPECIFIC APPS SCRIPT URL IS SET HERE ---
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFEgdzxL4Hkbp8H6drBzjaNHnEJ0QQkliwsqLUTGNHzQu7i9m0iLhh_ITUmQXO7RRgtQ/exec";
+
+    function showToast(m) {
+        const t = document.createElement('div');
+        t.style.cssText = "background:#1e293b; color:white; padding:12px 20px; border-radius:8px; margin-top:10px; font-size:13px; font-weight: bold; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);";
+        t.innerText = m;
+        document.getElementById('toast-container').appendChild(t);
+        setTimeout(() => t.remove(), 3500);
+    }
+
+    // 1. IMAGE COMPRESSION & PREVIEW
+    function previewFile(input) {
+        const file = input.files[0];
+        const td = input.closest('td');
+        const preview = td.querySelector('.img-preview');
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 500; // Balances quality and storage size
+                    const scale = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scale;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    // Compress to 70% quality JPEG
+                    const compressedData = canvas.toDataURL('image/jpeg', 0.7);
+                    preview.src = compressedData;
+                    preview.style.display = "block";
+                    
+                    // Make it clickable to view full size
+                    preview.onclick = () => openFullscreen(compressedData);
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // 2. CLICK TO VIEW FULL IMAGE
+    function openFullscreen(src) {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out;";
+        overlay.innerHTML = `<img src="${src}" style="max-width:90%;max-height:90%;border-radius:10px;box-shadow:0 0 50px rgba(0,0,0,0.5);">`;
+        overlay.onclick = () => overlay.remove();
+        document.body.appendChild(overlay);
+    }
+
+    function addRow(tableId) {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        const firstRow = tbody.rows[0];
+        const newRow = firstRow.cloneNode(true);
+        newRow.querySelectorAll('input').forEach(i => i.value = "");
+        const imgPreview = newRow.querySelector('.img-preview');
+        imgPreview.style.display = "none";
+        imgPreview.src = "";
+        imgPreview.onclick = null; // reset onclick handler
+        tbody.appendChild(newRow);
+    }
+
+    function deleteRow(btn) {
+        const row = btn.closest('tr');
+        if (row.parentNode.rows.length > 1) row.remove();
+        else showToast("CANNOT DELETE LAST ROW");
+    }
+
+    function moveRowUp(btn) {
+        const row = btn.closest('tr');
+        if (row.previousElementSibling) row.parentNode.insertBefore(row, row.previousElementSibling);
+    }
+
+    function moveRowDown(btn) {
+        const row = btn.closest('tr');
+        if (row.nextElementSibling) row.parentNode.insertBefore(row.nextElementSibling, row);
+    }
+
+    function resetForm() {
+        if(confirm("START NEW PROJECT? CURRENT DATA WILL BE CLEARED.")) location.reload();
+    }
+
+    // 3. IMPROVED DATA GATHERING
+    function getTableData(id) { 
+        return Array.from(document.querySelectorAll(`#${id} tbody tr`)).map(r => {
+            const inputs = Array.from(r.querySelectorAll('input[type="text"]')).map(i => i.value);
+            const img = r.querySelector('.img-preview');
+            return { 
+                inputs: inputs, 
+                imgSrc: (img && img.style.display !== "none") ? img.src : "" 
+            };
+        }); 
+    }
+
+    // 4. SAVE & OVERWRITE LOGIC
+    async function saveToCloud() {
+        const projectId = document.getElementById('project-name').value;
+        if (!projectId) return showToast("⚠️ ENTER PROJECT ID");
+
+        showToast("⏳ UPLOADING & SYNCING...");
+
+        const payload = {
+            projectId: projectId,
+            notes: document.getElementById('project-notes').value,
+            lam: getTableData('lam-table'),
+            eb: getTableData('eb-table'),
+            glass: getTableData('glass-table')
+        };
+
+        try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            });
+            showToast("✅ PROJECT UPDATED SUCCESSFULLY!");
+        } catch (error) {
+            showToast("❌ ERROR: NETWORK FAILURE");
+            console.error(error);
+        }
+    }
+
+    async function loadFromCloud() {
+        const name = prompt("ENTER PROJECT ID TO LOAD:");
+        if (!name) return;
+
+        showToast("🔍 SEARCHING DATABASE...");
+
+        try {
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?projectId=${encodeURIComponent(name)}`);
+            const result = await response.json();
+
+            if (result.status === "success") {
+                document.getElementById('project-notes').value = result.notes || "";
+                document.getElementById('project-name').value = name;
+
+                ['lam-table', 'eb-table', 'glass-table'].forEach((id, idx) => {
+                    const body = document.querySelector(`#${id} tbody`);
+                    const key = ['lam', 'eb', 'glass'][idx];
+                    const tableData = result[key];
+
+                    const templateRow = body.rows[0].cloneNode(true);
+                    templateRow.querySelectorAll('input[type="text"]').forEach(i => i.value = "");
+                    const templateImg = templateRow.querySelector('.img-preview');
+                    templateImg.style.display = "none";
+                    templateImg.src = "";
+                    templateImg.onclick = null;
+
+                    body.innerHTML = "";
+
+                    if (tableData && tableData.length > 0) {
+                        tableData.forEach(rowData => {
+                            const newRow = templateRow.cloneNode(true);
+                            const inputs = newRow.querySelectorAll('input[type="text"]');
+
+                            if (rowData.inputs) {
+                                rowData.inputs.forEach((v, i) => { if(inputs[i]) inputs[i].value = v; });
+                            }
+
+                            if (rowData.imgSrc) {
+                                const img = newRow.querySelector('.img-preview');
+                                img.src = rowData.imgSrc;
+                                img.style.display = "block";
+                                img.onclick = () => openFullscreen(rowData.imgSrc); // Restore click-to-zoom
+                            }
+                            body.appendChild(newRow);
+                        });
+                    } else {
+                        body.appendChild(templateRow);
+                    }
+                });
+                showToast("📂 PROJECT LOADED!");
+            } else if (result.status === "not_found") {
+                showToast("❌ PROJECT NOT FOUND.");
+            } else {
+                showToast("❌ ERROR LOADING PROJECT.");
+                console.error(result.message);
+            }
+        } catch (error) {
+            showToast("❌ NETWORK ERROR.");
+            console.error(error);
+        }
+    }
+</script>
+</body>
+</html>
