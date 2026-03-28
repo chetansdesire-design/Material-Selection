@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URBAN CASA | PROJECT SPEC SHEET</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vibrant-blue: #0061ff;
+            --soft-bg: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --accent-gradient: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+        }
+
+        body { background-color: var(--soft-bg); color: var(--text-dark); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; font-size: 0.85rem; }
+        .container { max-width: 1400px; margin: auto; }
+        
+        /* LOGIN SCREEN */
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--soft-bg); z-index: 99999; display: flex; align-items: center; justify-content: center; }
+        .login-box { background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); text-align: center; width: 320px; border: 1px solid var(--border-color); }
+        .login-input { border: 2px solid var(--border-color); padding: 12px 15px; border-radius: 10px; margin: 25px 0 15px 0; width: 100%; box-sizing: border-box; text-align: center; font-size: 1.2rem; outline: none; }
+        .login-btn { background: var(--vibrant-blue); color: white; border: none; padding: 14px 20px; border-radius: 10px; width: 100%; font-size: 1rem; font-weight: 800; cursor: pointer; }
+
+        /* SEARCH MODAL */
+        #search-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 41, 59, 0.8); z-index: 100000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .search-box { background: var(--white); padding: 30px; border-radius: 20px; width: 400px; max-width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2); display: flex; flex-direction: column; max-height: 80vh; }
+        .project-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex-grow: 1; border: 1px solid var(--border-color); border-radius: 12px; }
+        .project-item { padding: 15px; border-bottom: 1px solid var(--border-color); cursor: pointer; font-weight: 700; color: var(--text-dark); text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+        .project-item:hover { background: var(--soft-bg); color: var(--vibrant-blue); }
+
+        /* HEADER */
+        .header-card { background: var(--white); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border: 1px solid var(--border-color); }
+        h2 { margin: 0; font-size: 1.6rem; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
+        .brand-subtext { font-size: 0.7rem; color: var(--text-light); margin-top: 6px; text-transform: uppercase; font-weight: 600; }
+
+        /* TABLES */
+        .order-section { background: var(--white); border-radius: 20px; padding: 20px; margin-bottom: 30px; border: 1px solid var(--border-color); }
+        .section-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; padding: 10px 15px; border-radius: 8px; }
+        .title-lam { background-color: #eff6ff; color: #1e40af; }
+        .title-eb { background-color: #f0fdf4; color: #166534; }
+        .title-glass { background-color: #faf5ff; color: #6b21a8; }
+        
+        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
+        th { text-align: center; font-size: 0.7rem; color: var(--text-light); padding: 10px; text-transform: uppercase; }
+        td { background: var(--soft-bg); padding: 8px 10px; border: 1px solid var(--border-color); text-align: center; }
+        
+        input[type="text"] { text-transform: uppercase; text-align: center; border: none; background: transparent; width: 100%; font-family: inherit; font-size: 0.85rem; font-weight: 700; outline: none; }
+        textarea { width: 100%; height: 80px; border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; resize: none; box-sizing: border-box; font-family: inherit; text-transform: uppercase;}
+        
+        .img-preview { width: 80px; height: 50px; background: #e2e8f0; border-radius: 6px; object-fit: cover; display: none; margin: 5px auto; cursor: zoom-in; }
+        
+        .icon-btn { background: var(--white); border: 1px solid var(--border-color); padding: 10px; border-radius: 12px; cursor: pointer; }
+        .add-btn { background: var(--white); color: var(--vibrant-blue); border: 1px solid var(--vibrant-blue); padding: 8px 20px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer; margin: 10px auto; display: block; }
+        .upload-btn { font-size: 0.65rem; font-weight: 800; color: var(--vibrant-blue); cursor: pointer; text-transform: uppercase; }
+        .row-action-btn { background: var(--white); border: 1px solid var(--border-color); border-radius: 6px; padding: 4px 8px; cursor: pointer; margin: 0 2px; }
+
+        .signature-section { display: flex; justify-content: space-between; margin-top: 50px; padding: 0 40px; }
+        .sig-box { border-top: 2px solid var(--text-dark); width: 220px; text-align: center; padding-top: 10px; font-weight: 700; text-transform: uppercase; }
+        .print-fab { position: fixed; bottom: 30px; right: 30px; background: var(--vibrant-blue); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0, 97, 255, 0.3); cursor: pointer; font-size: 24px; z-index: 1000; }
+
+        @media print {
+            .add-btn, .upload-btn, .print-fab, .icon-btn, .action-cell, #login-overlay, #search-modal { display: none !important; }
+            body { background: white; padding: 0; }
+            .container { max-width: 100%; }
+            .header-card, .order-section { border: none; box-shadow: none; padding: 0; }
+            td, th { border: 1px solid #ccc !important; }
+        }
+    </style>
+</head>
+<body onload="checkAuth()">
+
+<div id="login-overlay">
+    <div class="login-box">
+        <h2>Urban Casa</h2>
+        <div class="brand-subtext">Authorized Personnel Only</div>
+        <input type="password" id="login-pwd" class="login-input" placeholder="Password">
+        <button class="login-btn" onclick="verifyPassword()">UNLOCK</button>
+    </div>
+</div>
+
+<div id="search-modal">
+    <div class="search-box">
+        <h3 style="display:flex; justify-content: space-between;">Projects <button onclick="closeSearch()" style="border:none; background:none; cursor:pointer;">×</button></h3>
+        <input type="text" id="live-search" placeholder="Search..." onkeyup="filterProjects()" style="padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+        <ul class="project-list" id="project-list-ul"></ul>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header-card">
+        <div>
+            <h2>Urban Casa</h2>
+            <div class="brand-subtext">Project Specification Sheet</div>
+        </div>
+        <input type="text" id="project-name" placeholder="CLIENT NAME / ID" style="width: 300px; font-size: 1.2rem; border-bottom: 2px solid var(--vibrant-blue); text-align: left;">
+        <div style="display: flex; gap: 10px;">
+            <button onclick="location.reload()" class="icon-btn">➕</button>
+            <button onclick="saveToCloud()" class="icon-btn" title="Save to Drive">💾</button>
+            <button onclick="openSearch()" class="icon-btn" title="Search Drive">🔍</button>
+        </div>
+    </div>
+
+    <!-- LAMINATE SECTION -->
+    <div class="order-section">
+        <div class="section-title title-lam">Laminate Specifications</div>
+        <table id="lam-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="LOC"></td>
+                    <td><input type="text" placeholder="UNIT"></td>
+                    <td><input type="text" placeholder="I/O"></td>
+                    <td><input type="text" placeholder="BRAND"></td>
+                    <td><input type="text" placeholder="CODE"></td>
+                    <td><input type="text" style="width: 50px;"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell"><button class="row-action-btn" onclick="this.closest('tr').remove()">✖</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('lam-table')">+ Add Row</button>
+    </div>
+
+    <!-- EDGE BAND SECTION -->
+    <div class="order-section">
+        <div class="section-title title-eb">Edge Banding</div>
+        <table id="eb-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Size</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="LOC"></td>
+                    <td><input type="text" placeholder="UNIT"></td>
+                    <td><input type="text" placeholder="TYPE"></td>
+                    <td><input type="text" placeholder="BRAND"></td>
+                    <td><input type="text" placeholder="CODE"></td>
+                    <td><input type="text" placeholder="2.0MM"></td>
+                    <td><input type="text" style="width: 50px;"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell"><button class="row-action-btn" onclick="this.closest('tr').remove()">✖</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('eb-table')">+ Add Row</button>
+    </div>
+
+    <!-- GLASS SECTION -->
+    <div class="order-section">
+        <div class="section-title title-glass">Profile Handles & Glass</div>
+        <table id="glass-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Item</th><th>Brand</th><th>Code</th><th>Qty</th><th>Pic</th><th class="action-cell">Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="LOC"></td>
+                    <td><input type="text" placeholder="UNIT"></td>
+                    <td><input type="text" placeholder="ITEM"></td>
+                    <td><input type="text" placeholder="BRAND"></td>
+                    <td><input type="text" placeholder="FINISH"></td>
+                    <td><input type="text" style="width: 50px;"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell"><button class="row-action-btn" onclick="this.closest('tr').remove()">✖</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('glass-table')">+ Add Row</button>
+    </div>
+
+    <div class="order-section">
+        <textarea id="project-notes" placeholder="ADD SPECIAL INSTRUCTIONS OR REMARKS HERE..."></textarea>
+    </div>
+
+    <div class="signature-section">
+        <div class="sig-box">Client Signature</div>
+        <div class="sig-box">Manager Signature</div>
+    </div>
+</div>
+
+<div class="print-fab" onclick="window.print()">🖨️</div>
+<div id="toast-container" style="position: fixed; bottom: 20px; left: 20px; z-index: 2000;"></div>
+
+<script>
+    const GOOGLE_SCRIPT_URL = "PASTE_YOUR_NEW_DEPLOYMENT_URL_HERE";
+
+    function checkAuth() { if (sessionStorage.getItem('urban_casa_auth') === 'true') document.getElementById('login-overlay').style.display = 'none'; }
+    function verifyPassword() {
+        const p = document.getElementById('login-pwd').value;
+        if (p === "1996" || p === "123") {
+            sessionStorage.setItem('urban_casa_auth', 'true');
+            document.getElementById('login-overlay').style.display = 'none';
+        }
+    }
+
+    function showToast(m) {
+        const t = document.createElement('div');
+        t.style.cssText = "background:#1e293b; color:white; padding:12px 20px; border-radius:8px; margin-top:10px; font-size:12px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);";
+        t.innerText = m;
+        document.getElementById('toast-container').appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
+
+    function addRow(tableId) {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        const newRow = tbody.rows[0].cloneNode(true);
+        newRow.querySelectorAll('input').forEach(i => i.value = "");
+        newRow.querySelector('.img-preview').style.display = "none";
+        tbody.appendChild(newRow);
+    }
+
+    // --- FIX 1: IMAGE COMPRESSION ---
+    function previewFile(input) {
+        const file = input.files[0];
+        const preview = input.closest('td').querySelector('.img-preview');
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 400;
+                let w = img.width, h = img.height;
+                if (w > MAX_WIDTH) { h *= MAX_WIDTH / w; w = MAX_WIDTH; }
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                const compressed = canvas.toDataURL('image/jpeg', 0.3); // High stability
+                preview.src = compressed;
+                preview.style.display = "block";
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function getTableData(id) {
+        return Array.from(document.querySelectorAll(`#${id} tbody tr`)).map(r => ({
+            inputs: Array.from(r.querySelectorAll('input[type="text"]')).map(i => i.value.toUpperCase()),
+            imgSrc: r.querySelector('.img-preview').src || ""
+        }));
+    }
+
+    // --- FIX 2: NO-CORS STABLE SAVE ---
+    async function saveToCloud() {
+        const id = document.getElementById('project-name').value.trim().toUpperCase();
+        if (!id) return showToast("⚠️ PROJECT ID MISSING");
+        
+        const btn = document.querySelector('button[title="Save to Drive"]');
+        btn.disabled = true;
+        showToast("⏳ SAVING... PLEASE WAIT");
+
+        const payload = {
+            projectId: id,
+            notes: document.getElementById('project-notes').value,
+            lam: getTableData('lam-table'),
+            eb: getTableData('eb-table'),
+            glass: getTableData('glass-table')
+        };
+
+        try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Bypasses network handshake errors
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            });
+            showToast("✅ SAVED TO CLOUD");
+        } catch (err) {
+            showToast("❌ NETWORK ERROR");
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    // --- FIX 3: SEARCH & LOAD ---
+    let allProjects = [];
+    async function openSearch() {
+        document.getElementById('search-modal').style.display = 'flex';
+        const ul = document.getElementById('project-list-ul');
+        ul.innerHTML = '<li class="project-item">Loading...</li>';
+        try {
+            const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=list`);
+            const json = await res.json();
+            allProjects = json.projects || [];
+            renderProjects(allProjects);
+        } catch(e) { ul.innerHTML = '<li class="project-item">Error loading list.</li>'; }
+    }
+
+    function closeSearch() { document.getElementById('search-modal').style.display = 'none'; }
+    
+    function renderProjects(list) {
+        const ul = document.getElementById('project-list-ul');
+        ul.innerHTML = list.map(p => `<li class="project-item" onclick="loadProject('${p}')">📁 ${p}</li>`).join('');
+    }
+
+    function filterProjects() {
+        const q = document.getElementById('live-search').value.toUpperCase();
+        renderProjects(allProjects.filter(p => p.toUpperCase().includes(q)));
+    }
+
+    async function loadProject(name) {
+        closeSearch();
+        showToast("🔍 LOADING...");
+        try {
+            const res = await fetch(`${GOOGLE_SCRIPT_URL}?projectId=${encodeURIComponent(name)}`);
+            const json = await res.json();
+            if (json.status === "success") {
+                const d = json.data;
+                document.getElementById('project-name').value = d.projectId;
+                document.getElementById('project-notes').value = d.notes || "";
+                
+                const map = { 'lam-table': d.lam, 'eb-table': d.eb, 'glass-table': d.glass };
+                Object.entries(map).forEach(([tid, data]) => {
+                    const tbody = document.querySelector(`#${tid} tbody`);
+                    const template = tbody.rows[0].cloneNode(true);
+                    tbody.innerHTML = "";
+                    data.forEach(row => {
+                        const nr = template.cloneNode(true);
+                        const ins = nr.querySelectorAll('input[type="text"]');
+                        row.inputs.forEach((v, i) => { if(ins[i]) ins[i].value = v; });
+                        if(row.imgSrc) { const img = nr.querySelector('.img-preview'); img.src = row.imgSrc; img.style.display="block"; }
+                        tbody.appendChild(nr);
+                    });
+                });
+                showToast("📂 LOADED");
+            }
+        } catch(e) { showToast("❌ LOAD FAILED"); }
+    }
+</script>
+</body>
+</html>
