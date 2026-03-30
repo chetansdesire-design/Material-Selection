@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>URBAN CASA | MATERIAL SELECTION DETAILS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vibrant-blue: #0061ff;
+            --soft-bg: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --accent-gradient: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+        }
+
+        body { background-color: var(--soft-bg); color: var(--text-dark); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; font-size: 0.85rem; }
+        .container { max-width: 1400px; margin: auto; }
+        
+        /* LOGIN SCREEN */
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--soft-bg); z-index: 99999; display: flex; align-items: center; justify-content: center; }
+        .login-box { background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); text-align: center; width: 320px; border: 1px solid var(--border-color); }
+        .login-input { border: 2px solid var(--border-color); padding: 12px 15px; border-radius: 10px; margin: 25px 0 15px 0; width: 100%; box-sizing: border-box; text-align: center; font-size: 1.2rem; outline: none; -webkit-text-security: disc; }
+        .login-btn { background: var(--vibrant-blue); color: white; border: none; padding: 14px 20px; border-radius: 10px; width: 100%; font-size: 1rem; font-weight: 800; cursor: pointer; }
+
+        /* SEARCH MODAL */
+        #search-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 41, 59, 0.8); z-index: 100000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .search-box { background: var(--white); padding: 30px; border-radius: 20px; width: 450px; max-width: 90%; display: flex; flex-direction: column; max-height: 80vh; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .project-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex-grow: 1; border: 1px solid var(--border-color); border-radius: 12px; }
+        .project-item { padding: 15px; border-bottom: 1px solid var(--border-color); cursor: pointer; font-weight: 700; color: var(--text-dark); text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .project-item:hover { background: var(--soft-bg); color: var(--vibrant-blue); }
+        .del-icon { color: #cbd5e1; font-size: 1.1rem; padding: 5px; border-radius: 6px; transition: 0.2s; }
+        .del-icon:hover { color: #ef4444; background: #fee2e2; }
+
+        /* HEADER */
+        .header-card { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border: 1px solid var(--border-color); position: relative; }
+        .header-brand h2 { margin: 0; font-size: 2.2rem; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: -1px; }
+        .tagline { font-size: 0.75rem; color: var(--vibrant-blue); font-weight: 800; text-transform: uppercase; margin-top: -2px; letter-spacing: 1px; }
+        .version-badge { position: absolute; top: 15px; left: 25px; font-size: 0.6rem; background: #f1f5f9; color: #64748b; padding: 2px 8px; border-radius: 50px; font-weight: 800; }
+        
+        .doc-title-main { text-align: center; margin-bottom: 25px; }
+        .doc-title-main h1 { font-size: 1.1rem; font-weight: 800; color: var(--text-dark); text-transform: uppercase; letter-spacing: 2px; margin: 0; border-bottom: 3px solid var(--vibrant-blue); display: inline-block; padding-bottom: 5px; }
+
+        /* TABLES */
+        .order-section { background: var(--white); border-radius: 20px; padding: 20px; margin-bottom: 30px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .section-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; padding: 12px 18px; border-radius: 10px; }
+        .title-lam { background-color: #eff6ff; color: #1e40af; }
+        .title-eb { background-color: #f0fdf4; color: #166534; }
+        .title-glass { background-color: #faf5ff; color: #6b21a8; }
+        
+        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        th { font-size: 0.75rem; color: var(--text-light); padding: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { background: var(--soft-bg); padding: 10px; border: 1px solid var(--border-color); text-align: center; border-radius: 4px; }
+        
+        input[type="text"], textarea { text-transform: uppercase; text-align: center; border: none; background: transparent; width: 100%; font-family: inherit; font-size: 0.85rem; font-weight: 700; outline: none; }
+        textarea { width: 100%; height: 100px; border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; resize: none; box-sizing: border-box; text-align: left; background: var(--white); }
+        input::placeholder { font-size: 0.7rem; color: #cbd5e1; font-weight: 600; }
+
+        .img-preview { width: 120px; height: 80px; background: #e2e8f0; border-radius: 8px; object-fit: cover; display: none; margin: 5px auto; cursor: zoom-in; border: 1px solid var(--border-color); }
+        
+        .icon-btn { background: var(--white); border: 1px solid var(--border-color); padding: 12px; border-radius: 14px; cursor: pointer; transition: 0.2s; }
+        .icon-btn:hover { background: var(--soft-bg); transform: translateY(-2px); }
+        .add-btn { background: var(--white); color: var(--vibrant-blue); border: 1px solid var(--vibrant-blue); padding: 10px 25px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; cursor: pointer; margin: 15px auto; display: block; transition: 0.2s; }
+        .add-btn:hover { background: var(--vibrant-blue); color: white; }
+        .upload-btn { font-size: 0.7rem; font-weight: 800; color: var(--vibrant-blue); cursor: pointer; text-transform: uppercase; display: block; margin-top: 5px; }
+        .row-action-btn { background: var(--white); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 10px; cursor: pointer; transition: 0.2s; color: var(--text-light); }
+        .row-action-btn:hover { background: #f1f5f9; color: var(--text-dark); }
+
+        .signature-section { display: flex; justify-content: space-between; margin-top: 60px; padding: 0 50px; }
+        .sig-box { border-top: 2px solid var(--text-dark); width: 250px; text-align: center; padding-top: 12px; font-weight: 800; text-transform: uppercase; color: var(--text-dark); }
+        .print-fab { position: fixed; bottom: 40px; right: 40px; background: var(--vibrant-blue); color: white; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0, 97, 255, 0.4); cursor: pointer; font-size: 28px; z-index: 1000; }
+
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .header-brand h2 {
+                -webkit-text-fill-color: var(--vibrant-blue) !important;
+                color: var(--vibrant-blue) !important;
+            }
+            .add-btn, .upload-btn, .print-fab, .icon-btn, .action-cell, #login-overlay, #search-modal { display: none !important; }
+            body { background: white; padding: 0; }
+            .header-card, .order-section { border: none; box-shadow: none; padding: 0; margin-bottom: 20px; }
+            th, td { border: 1px solid #94a3b8 !important; padding: 8px !important; }
+            .version-badge { display: none; }
+        }
+    </style>
+</head>
+<body onload="checkAuth()">
+
+<div id="login-overlay">
+    <div class="login-box">
+        <h2>URBAN CASA</h2>
+        <input type="text" id="login-pwd" class="login-input" placeholder="Password" onkeypress="handleKey(event)">
+        <button class="login-btn" onclick="verifyPassword()">AUTHENTICATE</button>
+    </div>
+</div>
+
+<div id="search-modal">
+    <div class="search-box">
+        <h3 style="display:flex; justify-content: space-between; margin-top: 0;">Cloud Projects <button onclick="closeSearch()" style="border:none; background:none; cursor:pointer; font-size: 1.5rem;">×</button></h3>
+        <input type="text" id="live-search" placeholder="Search by project ID..." onkeyup="filterProjects()" style="padding:15px; margin-bottom:15px; border-radius:10px; border:1px solid #ddd; font-family: inherit;">
+        <ul class="project-list" id="project-list-ul"></ul>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header-card">
+        <div class="version-badge">v1.5</div>
+        <div class="header-brand">
+            <h2>URBAN CASA</h2>
+            <div class="tagline">Timeless Furniture for Modern Living</div>
+        </div>
+        <input type="text" id="project-name" placeholder="PROJECT ID / CLIENT NAME" style="width: 400px; font-size: 1.3rem; border-bottom: 2px dashed var(--vibrant-blue); text-align: left; padding: 5px;">
+        <div style="display: flex; gap: 15px;">
+            <button onclick="location.reload()" class="icon-btn" title="New Selection">➕</button>
+            <button onclick="saveToCloud()" class="icon-btn" title="Save to Cloud">💾</button>
+            <button onclick="openSearch()" class="icon-btn" title="Project Database">🔍</button>
+        </div>
+    </div>
+
+    <div class="doc-title-main">
+        <h1>Material Selection Details</h1>
+    </div>
+
+    <div class="order-section">
+        <div class="section-title title-lam">Laminate Specifications</div>
+        <table id="lam-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Inner/Outer</th><th>Brand</th><th>Code</th><th>Qty</th><th>Sample Pic</th><th class="action-cell">Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="KITCHEN"></td>
+                    <td><input type="text" placeholder="BASE UNIT"></td>
+                    <td><input type="text" placeholder="INNER/OUTER"></td>
+                    <td><input type="text" placeholder="GREENLAM"></td>
+                    <td><input type="text" placeholder="5566 SUD"></td>
+                    <td><input type="text" style="width: 60px;" placeholder="0"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell" style="width: 120px;">
+                        <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
+                        <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
+                        <button class="row-action-btn" onclick="this.closest('tr').remove()" style="color: #ef4444;">✖</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('lam-table')">+ Add New Item</button>
+    </div>
+
+    <div class="order-section">
+        <div class="section-title title-eb">Edge Banding Details</div>
+        <table id="eb-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Type</th><th>Brand</th><th>Code</th><th>Size</th><th>Qty</th><th>Sample Pic</th><th class="action-cell">Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="KITCHEN"></td>
+                    <td><input type="text" placeholder="BASE UNIT"></td>
+                    <td><input type="text" placeholder="INNER/OUTER"></td>
+                    <td><input type="text" placeholder="GREENLAM"></td>
+                    <td><input type="text" placeholder="5566 SUD"></td>
+                    <td><input type="text" placeholder="2.0MM"></td>
+                    <td><input type="text" style="width: 60px;" placeholder="0"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell">
+                        <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
+                        <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
+                        <button class="row-action-btn" onclick="this.closest('tr').remove()" style="color: #ef4444;">✖</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('eb-table')">+ Add New Item</button>
+    </div>
+
+    <div class="order-section">
+        <div class="section-title title-glass">Profile Handles & Glass</div>
+        <table id="glass-table">
+            <thead><tr><th>Location</th><th>Unit</th><th>Item</th><th>Brand</th><th>Code</th><th>Qty</th><th>Sample Pic</th><th class="action-cell">Action</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="KITCHEN"></td>
+                    <td><input type="text" placeholder="BASE UNIT"></td>
+                    <td><input type="text" placeholder="GOLA PROFILE"></td>
+                    <td><input type="text" placeholder="HAFELE"></td>
+                    <td><input type="text" placeholder="ROSE GOLD"></td>
+                    <td><input type="text" style="width: 60px;" placeholder="0"></td>
+                    <td><img class="img-preview"><label class="upload-btn">Upload<input type="file" accept="image/*" onchange="previewFile(this)" style="display:none"></label></td>
+                    <td class="action-cell">
+                        <button class="row-action-btn" onclick="moveRowUp(this)">↑</button>
+                        <button class="row-action-btn" onclick="moveRowDown(this)">↓</button>
+                        <button class="row-action-btn" onclick="this.closest('tr').remove()" style="color: #ef4444;">✖</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="addRow('glass-table')">+ Add New Item</button>
+    </div>
+
+    <div class="order-section">
+        <textarea id="project-notes" placeholder="REMARKS / SPECIAL INSTRUCTIONS..."></textarea>
+    </div>
+
+    <div class="signature-section">
+        <div class="sig-box">Client Signature</div>
+        <div class="sig-box">Urban Casa Representative</div>
+    </div>
+</div>
+
+<div class="print-fab" onclick="window.print()">🖨️</div>
+<div id="toast-container" style="position: fixed; bottom: 20px; left: 20px; z-index: 2000;"></div>
+
+<script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbye1drGN-AoUgU9VnMav2AzcU9Ez-_9pEpDi3oj4jTLYvpoyHEKwzyK5p4Z0NOldNLN/exec";
+
+    function checkAuth() { if (sessionStorage.getItem('urban_casa_auth') === 'true') document.getElementById('login-overlay').style.display = 'none'; }
+    function verifyPassword() {
+        const p = document.getElementById('login-pwd').value;
+        if (p === "1996" || p === "123") {
+            sessionStorage.setItem('urban_casa_auth', 'true');
+            document.getElementById('login-overlay').style.display = 'none';
+        } else { alert("Access Denied"); }
+    }
+    function handleKey(e) { if (e.key === 'Enter') verifyPassword(); }
+
+    function showToast(m, d = 3500) {
+        const t = document.createElement('div');
+        t.style.cssText = "background:#1e293b; color:white; padding:15px 25px; border-radius:12px; margin-top:10px; font-size:14px; font-weight: 800; text-transform: uppercase; box-shadow: 0 10px 20px rgba(0,0,0,0.2); border-left: 5px solid var(--vibrant-blue);";
+        t.innerText = m;
+        document.getElementById('toast-container').appendChild(t);
+        if (d > 0) setTimeout(() => t.remove(), d);
+        return t;
+    }
+
+    function previewFile(input) {
+        const file = input.files[0];
+        const preview = input.closest('td').querySelector('.img-preview');
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 300;
+                let w = img.width, h = img.height;
+                if (w > MAX_WIDTH) { h *= MAX_WIDTH / w; w = MAX_WIDTH; }
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                const compressed = canvas.toDataURL('image/jpeg', 0.4);
+                preview.src = compressed;
+                preview.style.display = "block";
+                preview.onclick = () => openFullscreen(compressed);
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function openFullscreen(src) {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99999;display:flex;align-items:center;justify-content:center;cursor:zoom-out;backdrop-filter:blur(5px);";
+        overlay.innerHTML = `<img src="${src}" style="max-width:90%;max-height:90%;border-radius:15px;box-shadow: 0 0 50px rgba(0,0,0,0.5);">`;
+        overlay.onclick = () => overlay.remove();
+        document.body.appendChild(overlay);
+    }
+
+    function addRow(id) {
+        const tbody = document.querySelector(`#${id} tbody`);
+        const nr = tbody.rows[0].cloneNode(true);
+        nr.querySelectorAll('input').forEach(i => i.value = "");
+        nr.querySelector('.img-preview').style.display = "none";
+        nr.querySelector('.img-preview').src = "";
+        tbody.appendChild(nr);
+    }
+
+    function moveRowUp(btn) {
+        const row = btn.closest('tr');
+        if (row.previousElementSibling) row.parentNode.insertBefore(row, row.previousElementSibling);
+    }
+
+    function moveRowDown(btn) {
+        const row = btn.closest('tr');
+        if (row.nextElementSibling) row.parentNode.insertBefore(row.nextElementSibling, row);
+    }
+
+    function getTableData(id) {
+        return Array.from(document.querySelectorAll(`#${id} tbody tr`)).map(r => ({
+            inputs: Array.from(r.querySelectorAll('input[type="text"]')).map(i => i.value),
+            imgSrc: (r.querySelector('.img-preview').style.display !== 'none') ? r.querySelector('.img-preview').src : ""
+        }));
+    }
+
+    async function saveToCloud() {
+        const id = document.getElementById('project-name').value.trim().toUpperCase();
+        if (!id) return showToast("⚠️ PROJECT ID REQUIRED");
+        const t = showToast("⏳ SYNCING TO CLOUD...", 0);
+        const payload = {
+            action: "save",
+            projectId: id,
+            notes: document.getElementById('project-notes').value,
+            lam: getTableData('lam-table'),
+            eb: getTableData('eb-table'),
+            glass: getTableData('glass-table')
+        };
+        try {
+            const res = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            });
+            const result = await res.json();
+            t.remove();
+            if (result.status === "success") showToast("✅ SYNC COMPLETE!");
+            else showToast("❌ ERROR: " + result.message);
+        } catch (e) { t.remove(); showToast("❌ NETWORK FAILURE"); }
+    }
+
+    async function openSearch() {
+        document.getElementById('search-modal').style.display = 'flex';
+        const ul = document.getElementById('project-list-ul');
+        ul.innerHTML = '<li style="padding: 20px; text-align: center; color: #64748b;">⏳ Accessing Drive...</li>';
+        try {
+            const res = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({ action: "list" })
+            });
+            const json = await res.json();
+            if (json.status === "success") { allProjects = json.projects; renderProjects(allProjects); }
+        } catch(e) { ul.innerHTML = '<li style="padding: 20px; color: red;">Error loading database</li>'; }
+    }
+
+    function renderProjects(list) {
+        const ul = document.getElementById('project-list-ul');
+        ul.innerHTML = list.map(p => `
+            <li class="project-item">
+                <span onclick="loadProject('${p}')" style="flex-grow:1;">📁 ${p}</span>
+                <span class="del-icon" onclick="confirmDelete('${p}')">🗑️</span>
+            </li>
+        `).join('');
+    }
+
+    async function confirmDelete(p) {
+        const pwd = prompt(`PASSWORD REQUIRED TO DELETE "${p}":`);
+        if (pwd === "1996" || pwd === "123") {
+            if (confirm("THIS PROJECT WILL BE PERMANENTLY REMOVED.")) {
+                showToast("⏳ DELETING...");
+                try {
+                    const res = await fetch(GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain' },
+                        body: JSON.stringify({ action: "delete", projectId: p })
+                    });
+                    const result = await res.json();
+                    if (result.status === "success") {
+                        showToast("🗑️ PROJECT DELETED");
+                        openSearch();
+                    }
+                } catch(e) { showToast("❌ DELETE FAILED"); }
+            }
+        } else if (pwd !== null) { alert("INCORRECT PASSWORD"); }
+    }
+
+    function closeSearch() { document.getElementById('search-modal').style.display = 'none'; }
+    function filterProjects() {
+        const q = document.getElementById('live-search').value.toLowerCase();
+        renderProjects(allProjects.filter(p => p.toLowerCase().includes(q)));
+    }
+
+    async function loadProject(name) {
+        closeSearch();
+        const t = showToast("🔍 FETCHING PROJECT...", 0);
+        try {
+            const res = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({ action: "load", projectId: name })
+            });
+            const result = await res.json();
+            t.remove();
+            if (result.status === "success") {
+                const data = result.data;
+                document.getElementById('project-notes').value = data.notes || "";
+                document.getElementById('project-name').value = name;
+                ['lam-table', 'eb-table', 'glass-table'].forEach((id, idx) => {
+                    const tbody = document.querySelector(`#${id} tbody`);
+                    const key = ['lam', 'eb', 'glass'][idx];
+                    const rows = data[key];
+                    const template = tbody.rows[0].cloneNode(true);
+                    tbody.innerHTML = "";
+                    if (rows && rows.length > 0) {
+                        rows.forEach(r => {
+                            const nr = template.cloneNode(true);
+                            const ins = nr.querySelectorAll('input[type="text"]');
+                            r.inputs.forEach((v, i) => { if(ins[i]) ins[i].value = v; });
+                            if (r.imgSrc) {
+                                const img = nr.querySelector('.img-preview');
+                                img.src = r.imgSrc;
+                                img.style.display = "block";
+                                img.onclick = () => openFullscreen(r.imgSrc);
+                            }
+                            tbody.appendChild(nr);
+                        });
+                    } else { tbody.appendChild(template); }
+                });
+                showToast("📂 LOAD COMPLETE");
+            }
+        } catch (e) { t.remove(); showToast("❌ LOAD FAILED"); }
+    }
+</script>
+</body>
+</html>
